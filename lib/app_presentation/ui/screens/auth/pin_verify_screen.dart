@@ -1,22 +1,27 @@
 import 'dart:async';
-
-import 'package:ecommerce_project/app_presentation/ui/screens/signup_profile_screen.dart';
+import 'package:ecommerce_project/app_presentation/stateHolder/auth_controller.dart';
+import 'package:ecommerce_project/app_presentation/stateHolder/otp_state.dart';
+import 'package:ecommerce_project/app_presentation/ui/screens/auth/signup_profile_screen.dart';
+import 'package:ecommerce_project/app_presentation/ui/screens/bottom_nav_bar_screen.dart';
 import 'package:ecommerce_project/app_presentation/ui/utilities/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import '../widgets/app_logo.dart';
+import '../../widgets/app_logo.dart';
 
 class PinVerifyScreen extends StatefulWidget {
-  const PinVerifyScreen({super.key});
+  const PinVerifyScreen({super.key, required this.email});
+
+  final String email;
 
   @override
   State<PinVerifyScreen> createState() => _PinVerifyScreenState();
 }
 
 class _PinVerifyScreenState extends State<PinVerifyScreen> {
+  final TextEditingController _pinTEC = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  int counter=12;
+  int counter = 12;
   Timer? timer;
 
   @override
@@ -25,8 +30,9 @@ class _PinVerifyScreenState extends State<PinVerifyScreen> {
     countingTimeDelay();
   }
 
-  Future<void>countingTimeDelay()async{ // 2 sec delay koar por counting hobe
-    Future.delayed(const Duration(seconds: 2),(){
+  Future<void> countingTimeDelay() async {
+    // 2 sec delay koar por counting hobe
+    Future.delayed(const Duration(seconds: 2), () {
       timerSecond();
     });
   }
@@ -43,7 +49,9 @@ class _PinVerifyScreenState extends State<PinVerifyScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 120,),
+                  const SizedBox(
+                    height: 120,
+                  ),
                   const AppLogo(
                     height: 110,
                   ),
@@ -62,14 +70,15 @@ class _PinVerifyScreenState extends State<PinVerifyScreen> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                     child: PinCodeTextField(
+                      controller: _pinTEC,
                       appContext: context,
                       pastedTextStyle: TextStyle(
                         color: Colors.green.shade600,
                         fontWeight: FontWeight.bold,
                       ),
-                      length: 4,
+                      length: 6,
                       obscureText: false,
                       obscuringCharacter: '*',
                       // obscuringWidget: const FlutterLogo(
@@ -114,31 +123,62 @@ class _PinVerifyScreenState extends State<PinVerifyScreen> {
                   ),
                   SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Get.to(const SignUpProfileScreen());
-                          }, child: const Text('Next'))),
+                      child: GetBuilder<OtpState>(
+                          builder: (otpState) {
+                        return Visibility(
+                          visible: otpState.inProgress==false,
+                          replacement: const Center(child: CircularProgressIndicator(),),
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  bool response = await otpState.verifyOtpState(
+                                      widget.email, _pinTEC.text.trim());
+                                  if (response) {
+                                    if (otpState.shouldINavigateCompleteProfile) {
+                                      Get.to(()=>const SignUpProfileScreen());
+                                    } else {
+                                      Get.offAll(()=>const BottomNavBarScreen());
+                                    }
+                                  } else {
+                                    Get.showSnackbar(GetSnackBar(
+                                      message: otpState.errorMessage,
+                                      duration: Duration(seconds: 2),
+                                      isDismissible: true,
+                                      backgroundColor: Colors.redAccent,
+                                    ));
+                                  }
+                                }
+                              },
+                              child: const Text('Next')),
+                        );
+                      })),
                   const SizedBox(
                     height: 40,
                   ),
                   RichText(
-                      text:  TextSpan(children: [
+                      text: TextSpan(children: [
                     const TextSpan(
                         text: 'This code will expire in',
                         style: TextStyle(color: Colors.black, fontSize: 15)),
                     TextSpan(
                         text: '  $counter s',
-                        style: const TextStyle(color: Colors.blueAccent, fontSize: 19,fontWeight: FontWeight.w500))
+                        style: const TextStyle(
+                            color: Colors.blueAccent,
+                            fontSize: 19,
+                            fontWeight: FontWeight.w500))
                   ])),
                   TextButton(
                       onPressed: () {
-                        if(counter==0){
+                        if (counter == 0) {
                           //Get.to()
                         }
                       },
-                      child:  Text(
+                      child: Text(
                         'Resend Code',
-                        style:counter==0? TextStyle(color: Colors.blueAccent, fontSize: 15) : TextStyle(color: Colors.grey, fontSize: 15),
+                        style: counter == 0
+                            ? const TextStyle(
+                                color: Colors.blueAccent, fontSize: 15)
+                            : const TextStyle(color: Colors.grey, fontSize: 15),
                       ))
                 ],
               ),
@@ -148,19 +188,20 @@ class _PinVerifyScreenState extends State<PinVerifyScreen> {
       ),
     );
   }
-  void timerSecond(){
-    timer=Timer.periodic( const Duration(seconds: 1), (timer) {
 
+  void timerSecond() {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
-        if(counter<=12 && counter>0){
+        if (counter <= 12 && counter > 0) {
           counter--;
           print(timer.tick);
-        }else{
+        } else {
           timer.cancel();
         }
       });
     });
   }
+
   @override
   void dispose() {
     super.dispose();

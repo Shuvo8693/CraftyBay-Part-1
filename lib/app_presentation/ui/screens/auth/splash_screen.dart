@@ -1,8 +1,11 @@
-import 'package:ecommerce_project/app_presentation/ui/screens/verify_email_screen.dart';
+import 'package:ecommerce_project/app_presentation/stateHolder/auth_controller.dart';
+import 'package:ecommerce_project/app_presentation/ui/screens/auth/signup_profile_screen.dart';
+import 'package:ecommerce_project/app_presentation/ui/screens/auth/verify_email_screen.dart';
+import 'package:ecommerce_project/app_presentation/ui/screens/bottom_nav_bar_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import '../widgets/app_logo.dart';
+import 'package:get/get.dart';
+import '../../widgets/app_logo.dart';
+
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,9 +22,9 @@ class _SplashScreenState extends State<SplashScreen> {
     nextScreen();
   }
 
-  Future<void>nextScreen()async{
-   await Future.delayed(const Duration(seconds: 3),()async{
-      Get.off(const VerifyEmailScreen());
+  Future<void> nextScreen() async {
+    await Future.delayed(const Duration(seconds: 3), (){
+      Get.off(const BottomNavBarScreen());
     });
   }
 
@@ -30,9 +33,9 @@ class _SplashScreenState extends State<SplashScreen> {
     return const Scaffold(
       body: SafeArea(
           child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+             children: [
             Spacer(
               flex: 5,
             ),
