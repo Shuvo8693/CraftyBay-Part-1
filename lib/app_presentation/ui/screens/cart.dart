@@ -46,11 +46,7 @@ class _CartScreenState extends State<CartScreen> {
             ),
             GetBuilder<CartState>(
               builder: (context) {
-                return CartCheckout(
-                  textEB: 'CheckOut',
-                 // text: '\$${cartState.totalPrice}',
-                  onPressed: () {  },
-                );
+                return SizedBox(); //cart
               }
             )
           ],

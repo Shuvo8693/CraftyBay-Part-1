@@ -335,10 +335,20 @@ class _SignUpProfileScreenState extends State<SignUpProfileScreen> {
   @override
   void dispose() {
     super.dispose();
-    _cusPostCodeTEC.dispose();
-    _cusStateTEC.dispose();
-    _cusAddTEC.dispose();
     _cusNameTEC.dispose();
+    _cusAddTEC.dispose();
     _cusCityTEC.dispose();
+    _cusStateTEC.dispose();
+    _cusPostCodeTEC.dispose();
+    _cusCountryTEC.dispose();
+    _cusPhoneTEC.dispose();
+    _cusFaxTEC.dispose();
+    _shipNameTEC.dispose();
+    _shipAddTEC.dispose();
+    _shipCityTEC.dispose();
+    _shipStateTEC.dispose();
+    _shipPostcodeTEC.dispose();
+    _shipCountryTEC.dispose();
+    _shipPhoneTEC.dispose();
   }
 }

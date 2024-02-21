@@ -1,26 +1,40 @@
 import 'package:ecommerce_project/app_presentation/stateHolder/cart_state.dart';
+import 'package:ecommerce_project/app_presentation/stateHolder/create_cartlist_state.dart';
+import 'package:ecommerce_project/app_presentation/stateHolder/product_details_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../screens/auth/verify_email_screen.dart';
 import '../utilities/app_colors.dart';
 
 class CartCheckout extends StatefulWidget {
   const CartCheckout({
-    super.key, required this.textEB,  required this.onPressed,
+    super.key, required this.textEB, required this.color1, required this.size1, required this.index,
   });
 
 
   final String textEB;
- // final String text;
-  final Function() onPressed;
+  final String? color1;
+  final String? size1;
+  final int index;
+
 
   @override
   State<CartCheckout> createState() => _CartCheckoutState();
 }
 
 class _CartCheckoutState extends State<CartCheckout> {
+  late CartState cartState2;
 
-  CartState cartState2 =Get.find<CartState>();
+  @override
+  void initState() {
+    super.initState();
+    cartState2=Get.find<CartState>();
+    initializePrice();
+  }
+  Future<void> initializePrice()async{
+    return await Get.find<CartState>().init(widget.index);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +57,68 @@ class _CartCheckoutState extends State<CartCheckout> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Obx(()=>Text('\$${cartState2.totalPrice.value}',
+
+                ValueListenableBuilder<int>(
+                  valueListenable: cartState2.totalPrice,
+                  builder: (BuildContext context, totalPrice, Widget? child) {
+                  return Text('\$$totalPrice',
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                        fontSize: 16, fontWeight: FontWeight.bold),);}
                 ),
-                ElevatedButton(
-                  onPressed: widget.onPressed,
-                  style: ElevatedButton.styleFrom(
-                      shape: BeveledRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                  child: Text(widget.textEB),
-                )
+
+
+
+                GetBuilder<CreateCartListState>(
+                 builder: (createCartListState) {
+                   return ElevatedButton(
+                      onPressed: () async {
+                        if (widget.color1 != null && widget.size1 != null) {
+                          final productDetails =
+                              Get.find<ProductDetailsState>().getProductDetailsList;
+                          final productId = productDetails?.productId ?? 0;
+                          final cartState = Get.find<CartState>();
+                          final qty = cartState.counter[widget.index];
+
+                          if (productDetails != null) {
+                            bool result = await createCartListState.createCartItem(
+                                productID: productId,
+                                color: widget.color1 ?? '',
+                                size: widget.size1 ?? '',
+                                qty: qty);
+
+                            if (result) {
+                              Get.showSnackbar(GetSnackBar(
+                                title: createCartListState.errorMessage ?? '',
+                                message: 'Add to cart Completed',
+                                isDismissible: true,
+                                duration: Duration(seconds: 2),
+                              ));
+                            } else {
+                              Get.off(VerifyEmailScreen());
+                            }
+                          } else {
+                            Get.showSnackbar(GetSnackBar(
+                                title: createCartListState.errorMessage ?? '',
+                                message: 'Add to cart NotCompleted',
+                                isDismissible: true,
+                                duration: Duration(seconds: 2)));
+                          }
+                        } else {
+                          Get.showSnackbar(GetSnackBar(
+                            title: 'Failed',
+                            message: 'Add to cart failed',
+                            isDismissible: true,
+                            duration: Duration(seconds: 2),
+                          ));
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: BeveledRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                      child: Text(widget.textEB),
+                    );
+                 }
+               )
               ],
             )
           ],

@@ -13,4 +13,6 @@ class Urls{
   static String productCategoryUrl(int categoryId)=>"$baseUrl_02/ListProductByCategory/$categoryId";
   static String productDetailsUrl(int productId)=>"$baseUrl_02/ProductDetailsById/$productId";
   static String createCartListUrl="$baseUrl_02/CreateCartList";
+  static String reviewListUrl(int productId)=>"$baseUrl_02/ListReviewByProduct/$productId";
+  static String createReviewUrl="$baseUrl_02/CreateProductReview";
 }

@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 class ProductDetailsState extends GetxController{
 
   ProductDetailsModel _productDetailsModel=ProductDetailsModel();
-  ProductDetailList? get getProductDetailsList=>_productDetailsModel.productDetailList?.first??ProductDetailList();
+  ProductDetailList? get getProductDetailsList=>_productDetailsModel.productDetailList?.first?? ProductDetailList();
 
 
   String _errorMessage='';

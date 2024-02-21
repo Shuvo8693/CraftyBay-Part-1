@@ -2,6 +2,7 @@ import 'package:ecommerce_project/app_presentation/stateHolder/auth_controller.d
 import 'package:ecommerce_project/app_presentation/ui/screens/auth/signup_profile_screen.dart';
 import 'package:ecommerce_project/app_presentation/ui/screens/auth/verify_email_screen.dart';
 import 'package:ecommerce_project/app_presentation/ui/screens/bottom_nav_bar_screen.dart';
+import 'package:ecommerce_project/app_presentation/ui/screens/review_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../widgets/app_logo.dart';

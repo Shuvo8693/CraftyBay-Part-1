@@ -1,4 +1,5 @@
 import 'package:ecommerce_project/app_presentation/data/model/product_list_remark.dart';
+import 'package:ecommerce_project/app_presentation/stateHolder/cart_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,7 +22,8 @@ class _ProductCardState extends State<ProductCard> {
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(10),
-      onTap: (){
+      onTap: ()async{
+       await Get.find<CartState>().getPrice();
         Get.offAll(()=> ProductDetailsScreen(productIdId: widget.productListByRemark.id??0,));
       },
       child: Card(

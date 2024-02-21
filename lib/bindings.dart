@@ -3,11 +3,13 @@ import 'package:ecommerce_project/app_presentation/stateHolder/banner_state.dart
 import 'package:ecommerce_project/app_presentation/stateHolder/bottom_nav_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/cart_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/create_cartlist_state.dart';
+import 'package:ecommerce_project/app_presentation/stateHolder/create_review_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/otp_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/product_by_remark_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/product_category_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/product_details_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/read_profiledata_state.dart';
+import 'package:ecommerce_project/app_presentation/stateHolder/review_list_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/send_email&otp_controller.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/show_appbar_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/signup_profile_state.dart';
@@ -21,9 +23,11 @@ class StateBinding extends Bindings{
     Get.put(AuthController());
     Get.put(BottomNavState());
     Get.put(ShowAppBar());
-    Get.put(CartState());
     Get.put(ProductDetailsState());
+    Get.put(CartState());
     Get.put(CreateCartListState());
+    Get.put(CreateReviewState());
+    Get.put(ReviewListState());
     Get.put(SendEmailAndOtpController());
     Get.put(OtpState());
     Get.put(ReadProfileState());
