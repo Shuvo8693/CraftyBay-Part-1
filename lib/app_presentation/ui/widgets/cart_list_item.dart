@@ -1,33 +1,46 @@
-import 'package:ecommerce_project/app_presentation/stateHolder/cart_state.dart';
+import 'package:ecommerce_project/app_presentation/stateHolder/cart_list_state.dart';
+import 'package:ecommerce_project/app_presentation/stateHolder/delete_cartlist_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../data/model/cart_list_model.dart';
 import '../utilities/app_colors.dart';
 import '../utilities/assets_path.dart';
 
-class CartListItem extends StatefulWidget {
-  const CartListItem({
-    super.key, required this.index,
+class CartItem extends StatefulWidget {
+ const  CartItem({
+    super.key,
+    required this.index,
+    required this.cartListItem,
+    required this.cartListState, required this.initialQty,
   });
 
  final int index;
+ final CartListItem cartListItem;
+ final int initialQty;
+ final CartListState cartListState;
 
   @override
-  State<CartListItem> createState() => _CartListItemState();
+  State<CartItem> createState() => _CartListItemState();
 }
 
-class _CartListItemState extends State<CartListItem> {
+class _CartListItemState extends State<CartItem> {
 
   @override
   Widget build(BuildContext context) {
+    String? image=widget.cartListItem.productListByRemark?.image;
     return Card(
       child: Row(
         children: [
-          Image.asset(
-            AssetsPath.shoePath,
-            width: 115,
-            height: 100,
-          ),
+         image !=null? Image.network(
+            widget.cartListItem.productListByRemark?.image??'',
+           width: 115,
+           height: 100,
+           fit: BoxFit.cover,
+          ): Image.asset(AssetsPath.noImagePath,
+           width: 115,
+           height: 100,
+           fit: BoxFit.cover,),
           const SizedBox(
             width: 6,
           ),
@@ -38,90 +51,118 @@ class _CartListItemState extends State<CartListItem> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const SizedBox(
+                     SizedBox(
                       width: 205,
                       child: Text(
-                        'Shoe name jkjhjkhjkhkjjhggjhgjh',
+                        widget.cartListItem.productListByRemark?.title??'',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.black54,
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
                       ),
                     ),
-                    IconButton(
-                        padding: const EdgeInsets.all(0),
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.delete,
-                          size: 25,
-                        )),
+                    GetBuilder<DeleteCartListState>(
+                      builder: (deleteCartListState) {
+                          return IconButton(
+                              padding: const EdgeInsets.all(0),
+                              onPressed: () async {
+                                bool result = await deleteCartListState
+                                    .getToDeleteCartList(
+                                    widget.cartListItem.productId ?? 0);
+                                if (result) {
+                                 await Get.find<CartListState>().getCartList();
+                                  Get.showSnackbar(GetSnackBar(
+                                    title: 'Remove Success',
+                                    message: deleteCartListState.message
+                                        .toString(),
+                                    duration: const Duration(seconds: 2),
+                                    isDismissible: true,
+                                  ));
+
+                                } else {
+                                  Get.showSnackbar(const GetSnackBar(
+                                    title: 'Remove Failed',
+                                    message: 'Cart has been removed failed \n > Please Log-in',
+                                    duration: Duration(seconds: 2),
+                                    isDismissible: true,
+                                  ));
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.delete,
+                                size: 25,
+                              ));
+                      }
+                    ),
                   ],
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 20),
+                 Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Row(
                     children: [
-                      Text('Color: Red'),
-                      SizedBox(
+                      Text('Color: ${widget.cartListItem.color??''}'),
+                      const SizedBox(
                         width: 8,
                       ),
-                      Text('Size: XL'),
+                      Text('Size: ${widget.cartListItem.size??''}'),
                     ],
                   ),
                 ),
-                GetBuilder<CartState>(
-                    builder: (cartState) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Price: \$100',
-                        style: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      Wrap(
-                        children: [
-                          Container(
-                              height: 30,
-                              width: 35,
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 10),
-                              child: FloatingActionButton(
-                                elevation: cartState.counter[widget.index]==0? 0:null,
-                                backgroundColor: cartState.counter[widget.index]==0? AppColors.primaryColor.withOpacity(0.5):AppColors.primaryColor,
-                                onPressed: cartState.counter[widget.index]==0? null :() {
-                                  cartState.decrementCount(widget.index);
-                                },
-                                child: const Icon(Icons.remove),
-                              )),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Text(
-                              '${cartState.counter[widget.index]}',
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                          ),
-                          Container(
-                              height: 30,
-                              width: 35,
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 10),
-                              child: FloatingActionButton(
-                                backgroundColor: AppColors.primaryColor,
-                                onPressed: () {
-                                  cartState.incrementCount(widget.index);
-                                },
-                                child: const Icon(Icons.add),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Price: \$${widget.cartListItem.productListByRemark?.price ?? ''}',
+                      style: const TextStyle(
+                          color: AppColors.primaryColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500),
+                    ),
+                        Wrap(
+                            children: [
+                              Container(
+                                  height: 30,
+                                  width: 35,
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 10),
+                                  child: FloatingActionButton(
+                                    backgroundColor: AppColors.primaryColor,
+                                    onPressed: () {
+                                     widget.cartListState.decrement(widget.index);
+                                     },
+                                    child: const Icon(Icons.remove),
+                                  )),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: ValueListenableBuilder(
+                                  valueListenable: widget.cartListState.counter[widget.index],
+                                  builder: (BuildContext context, value, __) {
+                                 return Text(
+                                    '$value',
+                                    style: const TextStyle(fontSize: 18),
+                                  );
+                                  }
+                                ),
+                              ),
+                              Container(
+                                  height: 30,
+                                  width: 35,
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 10),
+                                  child: FloatingActionButton(
+                                    backgroundColor: AppColors.primaryColor,
+                                    onPressed: () {
+                                      widget.cartListState.increment(widget.index);
+                                    },
+                                      child: const Icon(Icons.add),
                               )),
                         ],
-                      ),
-                    ],
-                  );
-                }),
+                      )
+
+                  ],
+                )
               ],
             ),
           ),

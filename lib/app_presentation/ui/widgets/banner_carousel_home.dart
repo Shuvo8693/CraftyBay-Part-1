@@ -25,7 +25,6 @@ class BannerCarousel extends StatefulWidget {
 class _BannerCarouselState extends State<BannerCarousel> {
   //int _currentIndex=0; we can use this index alternative of ValueNotifier
 
-
   @override
   Widget build(BuildContext context) {
     return Column(

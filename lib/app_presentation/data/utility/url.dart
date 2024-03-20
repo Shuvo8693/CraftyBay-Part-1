@@ -15,4 +15,10 @@ class Urls{
   static String createCartListUrl="$baseUrl_02/CreateCartList";
   static String reviewListUrl(int productId)=>"$baseUrl_02/ListReviewByProduct/$productId";
   static String createReviewUrl="$baseUrl_02/CreateProductReview";
+  static String cartListUrl="$baseUrl_02/CartList";
+  static String invoiceUrl="$baseUrl_02/InvoiceCreate";
+  static String productWishListUrl="$baseUrl_02/ProductWishList";
+  static String deleteCartListUrl(int productId)=>"$baseUrl_02/DeleteCartList/$productId";
+  static String createWishListUrl(int productId)=>"$baseUrl_02/CreateWishList/$productId";
+
 }

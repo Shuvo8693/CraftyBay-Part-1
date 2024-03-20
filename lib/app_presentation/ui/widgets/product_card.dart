@@ -1,23 +1,28 @@
 import 'package:ecommerce_project/app_presentation/data/model/product_list_remark.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/cart_state.dart';
+import 'package:ecommerce_project/app_presentation/stateHolder/create_wishlist_state.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../stateHolder/wishlist_state.dart';
 import '../screens/product_details_screen.dart';
 import '../utilities/app_colors.dart';
 
 class ProductCard extends StatefulWidget {
   const ProductCard({
-    super.key, required this.productListByRemark,
+    super.key, required this.productListByRemark, this.productId,
   });
 
  final ProductListByRemark productListByRemark;
+  final int? productId;
 
   @override
   State<ProductCard> createState() => _ProductCardState();
 }
 
 class _ProductCardState extends State<ProductCard> {
+ // int? iD;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -43,7 +48,7 @@ class _ProductCardState extends State<ProductCard> {
                   fit: BoxFit.cover,
                 )),
 
-            Expanded(
+            Flexible(
               flex: 2,
               child: Container(
                 height: 60,
@@ -76,8 +81,43 @@ class _ProductCardState extends State<ProductCard> {
                                   borderRadius: BorderRadius.circular(3),
                                   borderSide: BorderSide.none
                               ),
-                              child: const Icon(Icons.favorite_border_outlined,size: 18,color: Colors.white,)),
-                          const SizedBox(width: 10,)
+                              child: GetBuilder<CreateWishListState>(
+                                builder: (createWishListState) {
+                                  int id=widget.productListByRemark.id??0;
+                                  return InkWell(
+                                      onTap:widget.productId !=null?(){} :()async{
+                                      bool result= await createWishListState.getToCreateWishList(id);
+                                      if(result){
+                                        Get.showSnackbar(const GetSnackBar(
+                                          title: 'success',
+                                          message: 'added to wishlist',
+                                          isDismissible: true,
+                                          duration: Duration(seconds: 2),
+                                        ));
+                                      }else{
+                                        Get.showSnackbar(GetSnackBar(
+                                          title: 'failed',
+                                          message: createWishListState.errorMessage,
+                                          isDismissible: true,
+                                          duration: const Duration(seconds: 2),
+                                        ));
+                                      }
+                                      },
+                                      onLongPress: (){},
+                                    child: widget.productId != null
+                                        ? const Icon(
+                                            Icons.delete_outline,
+                                            size: 18,
+                                            color: Colors.yellow,
+                                          )
+                                        : const Icon(
+                                            Icons.favorite,
+                                            size: 18,
+                                            color: Colors.white70,
+                                          ));
+                              }
+                              ) ),
+                          const SizedBox(width: 2,)
                         ],
                       )
                     ],

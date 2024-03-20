@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:ecommerce_project/app_presentation/stateHolder/send_email&otp_controller.dart';
 import 'package:ecommerce_project/app_presentation/ui/screens/auth/pin_verify_screen.dart';
 import 'package:ecommerce_project/app_presentation/ui/utilities/app_colors.dart';

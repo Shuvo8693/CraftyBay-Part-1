@@ -1,3 +1,4 @@
+import 'package:ecommerce_project/app_presentation/stateHolder/cart_list_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/cart_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/create_cartlist_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/product_details_state.dart';
@@ -18,23 +19,18 @@ class CartCheckout extends StatefulWidget {
   final String? size1;
   final int index;
 
-
   @override
   State<CartCheckout> createState() => _CartCheckoutState();
 }
 
 class _CartCheckoutState extends State<CartCheckout> {
-  late CartState cartState2;
-
-  @override
+    late CartState cartState2;
+@override
   void initState() {
     super.initState();
     cartState2=Get.find<CartState>();
-    initializePrice();
   }
-  Future<void> initializePrice()async{
-    return await Get.find<CartState>().init(widget.index);
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,27 +53,23 @@ class _CartCheckoutState extends State<CartCheckout> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-
-                ValueListenableBuilder<int>(
-                  valueListenable: cartState2.totalPrice,
-                  builder: (BuildContext context, totalPrice, Widget? child) {
-                  return Text('\$$totalPrice',
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),);}
-                ),
-
-
-
+                ValueListenableBuilder(
+                      valueListenable: cartState2.totalPrice??ValueNotifier(0),
+                      builder: (BuildContext context, totalPrice, __) {
+                      return Text('\$$totalPrice',
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),);}
+                    ),
                 GetBuilder<CreateCartListState>(
                  builder: (createCartListState) {
                    return ElevatedButton(
                       onPressed: () async {
-                        if (widget.color1 != null && widget.size1 != null) {
+                        if (widget.color1 != null && widget.size1 != null ) {
                           final productDetails =
                               Get.find<ProductDetailsState>().getProductDetailsList;
                           final productId = productDetails?.productId ?? 0;
                           final cartState = Get.find<CartState>();
-                          final qty = cartState.counter[widget.index];
+                          final qty = cartState.counter![widget.index];
 
                           if (productDetails != null) {
                             bool result = await createCartListState.createCartItem(
@@ -87,8 +79,9 @@ class _CartCheckoutState extends State<CartCheckout> {
                                 qty: qty);
 
                             if (result) {
+                            await Get.find<CartListState>().updateQuantity(productId, qty);
                               Get.showSnackbar(GetSnackBar(
-                                title: createCartListState.errorMessage ?? '',
+                                title: createCartListState.errorMessage,
                                 message: 'Add to cart Completed',
                                 isDismissible: true,
                                 duration: Duration(seconds: 2),
@@ -98,13 +91,13 @@ class _CartCheckoutState extends State<CartCheckout> {
                             }
                           } else {
                             Get.showSnackbar(GetSnackBar(
-                                title: createCartListState.errorMessage ?? '',
-                                message: 'Add to cart NotCompleted',
+                                title: 'Failed',
+                                message: ' Not Completed Add to cart',
                                 isDismissible: true,
                                 duration: Duration(seconds: 2)));
                           }
                         } else {
-                          Get.showSnackbar(GetSnackBar(
+                          Get.showSnackbar(const GetSnackBar(
                             title: 'Failed',
                             message: 'Add to cart failed',
                             isDismissible: true,

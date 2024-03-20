@@ -6,7 +6,6 @@ import 'package:ecommerce_project/app_presentation/ui/utilities/assets_path.dart
 import 'package:ecommerce_project/app_presentation/ui/widgets/cart_checkout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../utilities/app_colors.dart';
 import '../widgets/banner_carousel_product_details.dart';
 
@@ -14,49 +13,49 @@ class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({super.key, required this.productIdId});
 
   final int? productIdId;
+
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   final ValueNotifier<int> _currentIndex = ValueNotifier(0); // _currentIndex.value
+
+  int get index => 0;
+  List<String> urls1 = [];
+  String? size1;
+  String? color1;
+
   @override
   void initState(){
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-
+    WidgetsBinding.instance.addPostFrameCallback((__){
       Get.find<CartState>().getPrice();
-      color1 = Get
+
+      Get.find<ProductDetailsState>().getProductDetails(
+          productID: widget.productIdId ?? 0);
+      /*   color1 = Get
           .find<ProductDetailsState>()
           .getProductDetailsList
           ?.color
           ?.split(',')
           .map((e) => e)
           .last ?? '';
+
       size1 = Get
           .find<ProductDetailsState>()
           .getProductDetailsList
           ?.size
           ?.split(',')
           .map((e) => e)
-          .first ?? '';
-      Get.find<ProductDetailsState>().getProductDetails(
-          productID: widget.productIdId ?? 0);
-      Get.find<CartState>().update();
+          .first ?? '';*/
       Get.find<CartState>().init(index);
-      initializePrice();
-
     });
 
   }
   Future<void> initializePrice()async{
     return await Get.find<CartState>().init(index);
   }
-
-  int get index => 0;
-  List<String> urls1 = [];
-  String? size1;
-  String? color1;
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +173,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 fontWeight: FontWeight.w500),),
                             const SizedBox(height: 10,),
                              Text(
-                             '${productDetailsState.getProductDetailsList?.des}',
+                             productDetailsState.getProductDetailsList?.des??'',
                               style: const TextStyle(color: Colors.grey),),
                           ],
                         ),
@@ -184,11 +183,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Expanded(
                     flex: 1,
                     child: CartCheckout(
-                      textEB: 'AddToCart',
-                      color1: color1,
-                      size1: size1,
-                      index: index,
-                    ),
+                          textEB: 'AddToCart',
+                          color1: color1,
+                          size1: size1,
+                          index: index,
+                        ),
 
                   ),
                 ],
@@ -325,8 +324,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             width: 30,
             child: FloatingActionButton(
                 heroTag: UniqueKey(),
-                elevation: cartState.counter[index] == 0 ? 0 : 5,
-                backgroundColor: cartState.counter[index] == 0
+                elevation: (cartState.counter?[index]??0) == 0 ? 0 : 5,
+                backgroundColor: (cartState.counter?[index]??0)  == 0
                     ? AppColors.primaryColor.withOpacity(0.5)
                     : AppColors.primaryColor,
                 onPressed: () {
@@ -336,7 +335,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         Padding(
           padding: const EdgeInsets.only(left: 8, right: 8, top: 3, bottom: 10),
           child: Text(
-            '${cartState.counter[index]}',
+            '${(cartState.counter?[index]??0) }',
             textAlign: TextAlign.end,
             style: const TextStyle(fontSize: 18),
           ),
@@ -346,10 +345,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             width: 30,
             child: FloatingActionButton(
                 heroTag: UniqueKey(),
-                backgroundColor: cartState.counter[index] > 5
+                backgroundColor: (cartState.counter?[index]??0)  > 5
                     ? AppColors.primaryColor.withOpacity(0.5)
                     : AppColors.primaryColor,
-                onPressed: cartState.counter[index] > 5
+                onPressed: (cartState.counter?[index]??0)  > 5
                     ? () {}
                     : () {
                   cartState.incrementCount(index);
