@@ -32,6 +32,7 @@ class ProductListByRemark {
   String? title;
   String? shortDes;
   String? price;
+  int? unitPrice;
   int? discount;
   String? discountPrice;
   String? image;
@@ -50,6 +51,7 @@ class ProductListByRemark {
         this.title,
         this.shortDes,
         this.price,
+        this.unitPrice,
         this.discount,
         this.discountPrice,
         this.image,
@@ -68,6 +70,7 @@ class ProductListByRemark {
     title = json['title'];
     shortDes = json['short_des'];
     price = json['price'];
+    unitPrice = int.tryParse(json['price']);
     discount = json['discount'];
     discountPrice = json['discount_price'];
     image = json['image'];

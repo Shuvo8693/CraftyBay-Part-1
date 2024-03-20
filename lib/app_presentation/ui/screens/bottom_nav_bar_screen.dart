@@ -1,17 +1,16 @@
 import 'package:ecommerce_project/app_presentation/stateHolder/all_category_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/banner_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/bottom_nav_state.dart';
-import 'package:ecommerce_project/app_presentation/stateHolder/cart_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/product_by_remark_state.dart';
-import 'package:ecommerce_project/app_presentation/stateHolder/product_category_state.dart';
 import 'package:ecommerce_project/app_presentation/ui/screens/cart.dart';
 import 'package:ecommerce_project/app_presentation/ui/screens/catagories.dart';
 import 'package:ecommerce_project/app_presentation/ui/screens/home.dart';
-import 'package:ecommerce_project/app_presentation/ui/screens/product_details_screen.dart';
-import 'package:ecommerce_project/app_presentation/ui/screens/wish.dart';
+import 'package:ecommerce_project/app_presentation/ui/screens/wishlist_screen.dart';
 import 'package:ecommerce_project/app_presentation/ui/utilities/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../stateHolder/cart_list_state.dart';
 
 class BottomNavBarScreen extends StatefulWidget {
   const BottomNavBarScreen({super.key,});
@@ -36,12 +35,12 @@ class _BottomNavBarScreenState extends State<BottomNavBarScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-
       Get.find<BannerState>().slider();
       Get.find<AllCategoryState>().getAllCategory();
       Get.find<ProductByRemarkState>().popularProduct();
       Get.find<ProductByRemarkState>().specialProduct();
       Get.find<ProductByRemarkState>().newProduct();
+      Get.find<CartListState>().getCartList();
     });
 
   }

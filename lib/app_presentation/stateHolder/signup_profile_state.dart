@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:ecommerce_project/app_presentation/data/model/create_profile.dart';
-import 'package:ecommerce_project/app_presentation/data/model/create_profile_param.dart';
 import 'package:ecommerce_project/app_presentation/data/service/network_caller.dart';
 import 'package:ecommerce_project/app_presentation/data/utility/url.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/auth_controller.dart';

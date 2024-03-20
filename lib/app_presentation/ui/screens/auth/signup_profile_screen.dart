@@ -1,5 +1,4 @@
 import 'package:ecommerce_project/app_presentation/data/model/create_profile.dart';
-import 'package:ecommerce_project/app_presentation/data/model/create_profile_param.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/otp_state.dart';
 import 'package:ecommerce_project/app_presentation/stateHolder/signup_profile_state.dart';
 import 'package:ecommerce_project/app_presentation/ui/screens/bottom_nav_bar_screen.dart';

@@ -142,7 +142,7 @@ class _PinVerifyScreenState extends State<PinVerifyScreen> {
                                   } else {
                                     Get.showSnackbar(GetSnackBar(
                                       message: otpState.errorMessage,
-                                      duration: Duration(seconds: 2),
+                                      duration: const Duration(seconds: 2),
                                       isDismissible: true,
                                       backgroundColor: Colors.redAccent,
                                     ));

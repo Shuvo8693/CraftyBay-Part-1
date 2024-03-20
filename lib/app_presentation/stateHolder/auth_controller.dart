@@ -13,7 +13,7 @@ class AuthController extends GetxController {
     await sharedPreferences.setString('profile', jsonEncode(profile?.toJson()));
    }
 
-  Future<bool> isLoggedIn() async {
+ static Future<bool> isLoggedIn() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final token = sharedPreferences.getString('token');
     return token != null;
