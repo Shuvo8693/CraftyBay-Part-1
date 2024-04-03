@@ -1,7 +1,7 @@
 # ecommerce_project_1
 
 A new Flutter project.
-<img src="Screenshot_20240404_000930.png" width="300px">
+<img src="project ScreenShot/Screenshot_20240404_000930.png" width="250px">
 ## Getting Started
 
 This project is a starting point for a Flutter application.
