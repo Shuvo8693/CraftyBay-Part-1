@@ -1,4 +1,4 @@
-# ecommerce_project_1
+# ecommerce_project
 
 A new Flutter project.
 <img src="project ScreenShot/Screenshot_20240404_000930.png" width="200px">
