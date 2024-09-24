@@ -22,7 +22,7 @@ class CreateCartListState extends GetxController{
       "size":size,
       "qty":qty};
 
-    await Get.find<AuthController>().tokenInitialization(); // waiting for ready token
+    await Get.find<AuthController>().tokenInitialization();
      final token= Get.find<AuthController>().varToken;
 
     final response = await NetworkCaller().postRequest(Urls.createCartListUrl,bodyParams , token.toString());

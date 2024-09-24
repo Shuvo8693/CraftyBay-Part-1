@@ -1,5 +1,4 @@
 
-import 'package:ecommerce_project/app_presentation/stateHolder/product_details_state.dart';
 import 'package:ecommerce_project/app_presentation/ui/utilities/app_theme.dart';
 import 'package:ecommerce_project/bindings.dart';
 import 'package:flutter/material.dart';
